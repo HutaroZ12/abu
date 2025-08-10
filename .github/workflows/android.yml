@@ -29,6 +29,9 @@ jobs:
         with:
           haxe-version: 4.3.4
 
+      - name: Install extension-androidtools
+        run: haxelib install extension-androidtools
+  
       - name: Installing Libraries
         run: |
           haxelib setup ~/haxelib
