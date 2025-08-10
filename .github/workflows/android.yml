@@ -1,36 +1,39 @@
 name: Android Build
-on: workflow_dispatch
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-        contents: write
-        actions: write
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@main
-        with:
-          submodules: true
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup Android NDK
-        id: setup-ndk
-        uses: nttld/setup-ndk@main
-        with:
-          ndk-version: r25c
-
-      - name: Setup Java JDK
-        uses: actions/setup-java@main
-        with:
-          distribution: 'zulu'
-          java-version: '18'
-
-      - name: Setup Haxe
-        uses: krdlab/setup-haxe@master
+      - name: Set up Haxe
+        uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.3.4
 
-      - name: Install extension-androidtools
-        run: haxelib install extension-androidtools
+      - name: Install Neko
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y neko
+
+      - name: Install required Haxe libraries
+        run: |
+          haxelib install extension-androidtools
+
+      - name: Build Android project
+        run: |
+          # Adapte este comando ao seu processo de build
+          haxe build.hxml
   
       - name: Installing Libraries
         run: |
